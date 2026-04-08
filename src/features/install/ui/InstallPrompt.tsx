@@ -28,7 +28,7 @@ export default function InstallPrompt() {
               className="install-prompt-mobile-icon"
               aria-hidden="true"
             />
-            Install TerraInk for faster access and a better experience.
+            Install Atlasify for faster access and a better experience.
           </span>
           <div className="install-prompt-actions">
             <button
@@ -120,7 +120,7 @@ export default function InstallPrompt() {
               className="install-prompt-mobile-icon"
               aria-hidden="true"
             />
-            For faster access and a better experience, install TerraInk from
+            For faster access and a better experience, install Atlasify from
             your browser menu:
             <strong> Install app </strong>
             or

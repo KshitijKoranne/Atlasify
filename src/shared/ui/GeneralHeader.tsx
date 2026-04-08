@@ -15,9 +15,9 @@ export default function GeneralHeader({ onAboutOpen }: GeneralHeaderProps) {
           alt="Atlasify logo"
         />
         <div className="desktop-brand-copy brand-copy">
-          <h1 className="desktop-brand-title">TerraInk</h1>
+          <h1 className="desktop-brand-title">Atlasify</h1>
           <p className="desktop-brand-kicker app-kicker">
-            The Cartographic Poster Engine
+            Map Poster Generator
           </p>
         </div>
       </div>

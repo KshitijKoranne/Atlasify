@@ -1,4 +1,4 @@
-# Contributing to TerraInk
+# Contributing to Atlasify
 
 Thanks for your interest in contributing. This guide explains the required workflow and the engineering standards used in this repository.
 
