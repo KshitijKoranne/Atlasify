@@ -1,6 +1,6 @@
-import { KOFI_URL, REPO_API_URL, REPO_URL, SOCIAL_INSTAGRAM } from "@/core/config";
+import { KOFI_URL, REPO_API_URL, REPO_URL, SOCIAL_X } from "@/core/config";
 import { useRepoStars } from "@/shared/hooks/useRepoStars";
-import { GitHubIcon, InstagramIcon, KofiIcon, StarIcon } from "@/shared/ui/Icons";
+import { GitHubIcon, KofiIcon, StarIcon, XTwitterIcon } from "@/shared/ui/Icons";
 
 interface SocialLinkGroupProps {
   variant: "header" | "mobile-export";
@@ -9,7 +9,7 @@ interface SocialLinkGroupProps {
 export default function SocialLinkGroup({ variant }: SocialLinkGroupProps) {
   const repoUrl = String(REPO_URL ?? "").trim();
   const repoApiUrl = String(REPO_API_URL ?? "").trim();
-  const instagramUrl = String(SOCIAL_INSTAGRAM ?? "").trim();
+  const xUrl = String(SOCIAL_X ?? "").trim();
   const kofiUrl = String(KOFI_URL ?? "").trim();
   const { repoStars, repoStarsLoading } = useRepoStars(repoApiUrl);
   const starsText = repoStarsLoading ? "..." : repoStars?.toLocaleString() ?? "Star";
@@ -25,7 +25,7 @@ export default function SocialLinkGroup({ variant }: SocialLinkGroupProps) {
           href={repoUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label="Open TerraInk repository on GitHub"
+          aria-label="Open Atlasify repository on GitHub"
           title="GitHub repository"
         >
           <GitHubIcon />
@@ -35,16 +35,16 @@ export default function SocialLinkGroup({ variant }: SocialLinkGroupProps) {
           </span>
         </a>
       ) : null}
-      {instagramUrl ? (
+      {xUrl ? (
         <a
           className="general-header-social-btn"
-          href={instagramUrl}
+          href={xUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label="Follow TerraInk on Instagram"
-          title="Instagram"
+          aria-label="Follow Atlasify on X"
+          title="X (Twitter)"
         >
-          <InstagramIcon />
+          <XTwitterIcon />
         </a>
       ) : null}
       {kofiUrl ? (
@@ -53,8 +53,8 @@ export default function SocialLinkGroup({ variant }: SocialLinkGroupProps) {
           href={kofiUrl}
           target="_blank"
           rel="noreferrer"
-          aria-label="Support TerraInk on Ko-fi"
-          title="Ko-fi"
+          aria-label="Support Atlasify"
+          title="Buy Me a Coffee"
         >
           <KofiIcon />
         </a>
