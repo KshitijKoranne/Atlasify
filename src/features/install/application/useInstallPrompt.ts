@@ -8,7 +8,7 @@ import {
 
 declare global {
   interface Window {
-    __terrainkDeferredInstallPrompt?: Event;
+    __atlasifyDeferredInstallPrompt?: Event;
   }
 }
 
@@ -46,7 +46,7 @@ export default function useInstallPrompt() {
   const [swReady, setSwReady] = useState(false);
 
   useEffect(() => {
-    setBeforeInstallPromptFired(Boolean(window.__terrainkDeferredInstallPrompt));
+    setBeforeInstallPromptFired(Boolean(window.__atlasifyDeferredInstallPrompt));
     setSwControlled(Boolean(navigator.serviceWorker?.controller));
     if (navigator.serviceWorker?.ready) {
       void navigator.serviceWorker.ready
@@ -66,9 +66,9 @@ export default function useInstallPrompt() {
       return;
     }
 
-    if (window.__terrainkDeferredInstallPrompt) {
+    if (window.__atlasifyDeferredInstallPrompt) {
       setDeferredPrompt(
-        window.__terrainkDeferredInstallPrompt as BeforeInstallPromptEvent,
+        window.__atlasifyDeferredInstallPrompt as BeforeInstallPromptEvent,
       );
     }
 
@@ -77,12 +77,12 @@ export default function useInstallPrompt() {
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setBeforeInstallPromptFired(true);
       setShowAndroidHint(false);
-      window.__terrainkDeferredInstallPrompt = e;
+      window.__atlasifyDeferredInstallPrompt = e;
     };
     window.addEventListener("beforeinstallprompt", handler);
 
     const fallbackTimer = window.setTimeout(() => {
-      if (isAndroid() && !window.__terrainkDeferredInstallPrompt) {
+      if (isAndroid() && !window.__atlasifyDeferredInstallPrompt) {
         setShowAndroidHint(true);
       }
     }, 4000);
@@ -135,7 +135,7 @@ export default function useInstallPrompt() {
     isAndroid: isAndroid(),
     isStandaloneMode: isInStandaloneMode(),
     deferredPromptAvailable: Boolean(deferredPrompt),
-    deferredPromptCached: Boolean(window.__terrainkDeferredInstallPrompt),
+    deferredPromptCached: Boolean(window.__atlasifyDeferredInstallPrompt),
     beforeInstallPromptFired,
     promptOutcome,
     swControlled,

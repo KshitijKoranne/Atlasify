@@ -35,7 +35,7 @@ function CreditsRemovalModal({
       >
         <div className="credits-modal__body">
           <p className="credits-modal__headline" id="credits-modal-title">
-            ✨ Wait! Did you know Terraink is open-source?
+            ✨ Wait! Did you know Atlasify is open-source?
           </p>
           <p className="credits-modal__text">
             Keeping the credit visible helps more people find this tool and

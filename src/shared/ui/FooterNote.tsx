@@ -46,8 +46,16 @@ export default function FooterNote() {
 
       <div className="desktop-footer-middle">
         <p className="made-note">
-          Terraink™ v{appVersion} | © 2026 | Made with{" "}
-          <span className="heart">❤︎</span> in Hannover, Germany
+          <strong>Atlasify</strong> v{appVersion} | by{" "}
+          <a
+            className="source-link"
+            href="https://kjrlabs.in"
+            target="_blank"
+            rel="noreferrer"
+          >
+            KJR Labs
+          </a>{" "}
+          | © 2026
         </p>
       </div>
 
