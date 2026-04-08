@@ -3,11 +3,7 @@
 
 export { FaGithub as GitHubIcon } from "react-icons/fa";
 export { FaStar as StarIcon } from "react-icons/fa";
-export { FaLinkedin as LinkedInIcon } from "react-icons/fa";
-export { FaInstagram as InstagramIcon } from "react-icons/fa";
-export { FaRedditAlien as RedditIcon } from "react-icons/fa";
-export { FaYoutube as YouTubeIcon } from "react-icons/fa";
-export { FaThreads as ThreadsIcon } from "react-icons/fa6";
+export { FaXTwitter as XTwitterIcon } from "react-icons/fa6";
 export { FaCheck as CheckIcon } from "react-icons/fa";
 export { SiKofi as KofiIcon } from "react-icons/si";
 export { FiDownload as DownloadIcon } from "react-icons/fi";

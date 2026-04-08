@@ -2,26 +2,15 @@ import { useRepoStars } from "@/shared/hooks/useRepoStars";
 import {
   REPO_URL,
   REPO_API_URL,
-  CONTACT_EMAIL,
-  LEGAL_NOTICE_URL,
-  PRIVACY_URL,
-  SOCIAL_LINKEDIN,
-  SOCIAL_INSTAGRAM,
-  SOCIAL_REDDIT,
-  SOCIAL_THREADS,
-  SOCIAL_YOUTUBE,
   KOFI_URL,
+  SOCIAL_X,
 } from "@/core/config";
 import {
   GitHubIcon,
   StarIcon,
   CheckIcon,
   KofiIcon,
-  LinkedInIcon,
-  InstagramIcon,
-  RedditIcon,
-  ThreadsIcon,
-  YouTubeIcon,
+  XTwitterIcon,
 } from "./Icons";
 
 /* ── sub-components ── */
@@ -41,33 +30,7 @@ function HelpUsGrowSection({
       ? repoStars.toLocaleString()
       : null;
 
-  const socialLinks = [
-    {
-      href: String(SOCIAL_LINKEDIN ?? "").trim(),
-      Icon: LinkedInIcon,
-      label: "LinkedIn",
-    },
-    {
-      href: String(SOCIAL_INSTAGRAM ?? "").trim(),
-      Icon: InstagramIcon,
-      label: "Instagram",
-    },
-    {
-      href: String(SOCIAL_REDDIT ?? "").trim(),
-      Icon: RedditIcon,
-      label: "Reddit",
-    },
-    {
-      href: String(SOCIAL_THREADS ?? "").trim(),
-      Icon: ThreadsIcon,
-      label: "Threads",
-    },
-    {
-      href: String(SOCIAL_YOUTUBE ?? "").trim(),
-      Icon: YouTubeIcon,
-      label: "YouTube",
-    },
-  ];
+  const xUrl = String(SOCIAL_X ?? "").trim();
   const kofiUrl = String(KOFI_URL ?? "").trim();
 
   return (
@@ -131,12 +94,7 @@ function HelpUsGrowSection({
                 <KofiIcon className="badge-icon" />
                 <span>Buy Me a Coffee</span>
               </a>
-            ) : (
-              <span className="github-badge" style={{ opacity: 0.45 }}>
-                <KofiIcon className="badge-icon" />
-                <span>Buy Me a Coffee</span>
-              </span>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -144,28 +102,21 @@ function HelpUsGrowSection({
         <div className="hug-row">
           <span className="hug-row-label">Spread the word</span>
           <div className="hug-row-content social-links-row">
-            {socialLinks.map(({ href, Icon, label }) =>
-              href ? (
-                <a
-                  key={label}
-                  className="social-badge"
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Follow Atlasify on ${label}`}
-                  title={label}
-                >
-                  <Icon className="social-icon" />
-                </a>
-              ) : (
-                <span
-                  key={label}
-                  className="social-badge social-badge--inactive"
-                  title={label}
-                >
-                  <Icon className="social-icon" />
-                </span>
-              ),
+            {xUrl ? (
+              <a
+                className="social-badge"
+                href={xUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow Atlasify on X"
+                title="X (Twitter)"
+              >
+                <XTwitterIcon className="social-icon" />
+              </a>
+            ) : (
+              <span className="social-badge social-badge--inactive" title="X (Twitter)">
+                <XTwitterIcon className="social-icon" />
+              </span>
             )}
           </div>
         </div>

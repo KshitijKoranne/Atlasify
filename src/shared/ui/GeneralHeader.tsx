@@ -12,7 +12,7 @@ export default function GeneralHeader({ onAboutOpen }: GeneralHeaderProps) {
         <img
           className="desktop-brand-logo brand-logo"
           src="/assets/logo.svg"
-          alt="TerraInk logo"
+          alt="Atlasify logo"
         />
         <div className="desktop-brand-copy brand-copy">
           <h1 className="desktop-brand-title">TerraInk</h1>
