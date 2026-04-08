@@ -17,7 +17,7 @@ const colorReferencePattern = /^\$([a-zA-Z0-9_.]+)$/;
 type ThemeObject = Record<string, unknown>;
 
 const fallbackTheme: ResolvedTheme = {
-  name: "Terracotta",
+  name: "Atlas",
   description: "Mediterranean warmth - burnt orange and clay tones on cream",
   ui: {
     bg: "#F5EDE4",
@@ -105,15 +105,12 @@ const referenceAliases: Record<string, string> = {
 };
 
 const preferredThemeOrder = [
-  "midnight_blue",
-  "terracotta",
-  "neon",
-  "coral",
-  "heatwave",
-  "ruby",
-  "sage",
-  "copper",
-  "rustic",
+  // Dark
+  "midnight_blue", "neon", "heatwave", "ruby", "emerald", "noir", "dusk",
+  // Light
+  "terracotta", "saffron", "coral", "sage", "forest", "ocean", "sand", "arctic",
+  // Neutral / specialty
+  "copper", "copper_patina", "rustic", "blueprint", "japanese_ink", "contrast_zones", "slate", "mist",
 ];
 
 function isObject(value: unknown): value is ThemeObject {
