@@ -21,12 +21,12 @@ const tabs: {
   label: string;
   Icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { id: "location", label: "Location", Icon: LocationIcon },
-  { id: "theme", label: "Theme", Icon: ThemeIcon },
-  { id: "layout", label: "Layout", Icon: LayoutIcon },
-  { id: "style", label: "Style", Icon: StyleIcon },
-  { id: "layers", label: "Layers", Icon: LayersIcon },
-  { id: "markers", label: "Markers", Icon: MarkersIcon },
+  { id: "location", label: "Place", Icon: LocationIcon },
+  { id: "theme", label: "Style", Icon: ThemeIcon },
+  { id: "layout", label: "Size", Icon: LayoutIcon },
+  { id: "style", label: "Text", Icon: StyleIcon },
+  { id: "layers", label: "Details", Icon: LayersIcon },
+  { id: "markers", label: "Pins", Icon: MarkersIcon },
 ];
 
 interface MobileNavBarProps {

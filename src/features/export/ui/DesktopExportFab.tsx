@@ -19,39 +19,14 @@ export default function DesktopExportFab() {
     if (!isExporting) setActiveFormat(null);
   }, [isExporting]);
 
-  const isLoading = (fmt: ExportFormat) =>
-    isExporting && activeFormat === fmt;
+  const isLoading = (fmt: ExportFormat) => isExporting && activeFormat === fmt;
 
   return (
     <>
       <div className="desktop-export-fab">
-        {/* SVG + PDF fly out above on hover */}
-        <div className="desktop-export-flyout">
-          <button
-            type="button"
-            className="desktop-export-btn desktop-export-btn--svg"
-            disabled={isExporting}
-            onClick={() => { setActiveFormat("svg"); void handleDownloadSvg(); }}
-          >
-            {isLoading("svg")
-              ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
-              : <DownloadIcon className="desktop-export-btn-icon" />}
-            <span>SVG</span>
-          </button>
-          <button
-            type="button"
-            className="desktop-export-btn desktop-export-btn--pdf"
-            disabled={isExporting}
-            onClick={() => { setActiveFormat("pdf"); void handleDownloadPdf(); }}
-          >
-            {isLoading("pdf")
-              ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
-              : <DownloadIcon className="desktop-export-btn-icon" />}
-            <span>PDF</span>
-          </button>
-        </div>
+        <p className="desktop-export-label">Export Poster</p>
 
-        {/* Primary PNG button — shows "Download" by default, "PNG" on hover */}
+        {/* Primary — PNG free tier */}
         <button
           type="button"
           className="desktop-export-btn desktop-export-btn--primary"
@@ -61,8 +36,50 @@ export default function DesktopExportFab() {
           {isLoading("png")
             ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
             : <DownloadIcon className="desktop-export-btn-icon" />}
-          <span className="desktop-export-label-default">Download</span>
-          <span className="desktop-export-label-hover">PNG</span>
+          <span>PNG</span>
+          <span className="desktop-export-tier">Free</span>
+        </button>
+
+        {/* PDF */}
+        <button
+          type="button"
+          className="desktop-export-btn desktop-export-btn--pdf"
+          disabled={isExporting}
+          onClick={() => { setActiveFormat("pdf"); void handleDownloadPdf(); }}
+        >
+          {isLoading("pdf")
+            ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
+            : <DownloadIcon className="desktop-export-btn-icon" />}
+          <span>PDF</span>
+          <span className="desktop-export-tier">Free</span>
+        </button>
+
+        {/* SVG */}
+        <button
+          type="button"
+          className="desktop-export-btn desktop-export-btn--svg"
+          disabled={isExporting}
+          onClick={() => { setActiveFormat("svg"); void handleDownloadSvg(); }}
+        >
+          {isLoading("svg")
+            ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
+            : <DownloadIcon className="desktop-export-btn-icon" />}
+          <span>SVG</span>
+          <span className="desktop-export-tier">Free</span>
+        </button>
+
+        <div className="desktop-export-divider" />
+
+        {/* Pro tier — placeholder, wired to Razorpay later */}
+        <button
+          type="button"
+          className="desktop-export-btn desktop-export-btn--pro"
+          disabled
+          title="High-resolution export — coming soon"
+        >
+          <DownloadIcon className="desktop-export-btn-icon" />
+          <span>2K / 4K / 8K</span>
+          <span className="desktop-export-tier desktop-export-tier--pro">Pro</span>
         </button>
       </div>
 
@@ -76,5 +93,3 @@ export default function DesktopExportFab() {
     </>
   );
 }
-
-

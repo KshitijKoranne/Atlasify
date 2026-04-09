@@ -14,11 +14,11 @@ const tabs: {
   label: string;
   Icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { id: "theme", label: "Theme", Icon: ThemeIcon },
-  { id: "layout", label: "Layout", Icon: LayoutIcon },
-  { id: "style", label: "Style", Icon: StyleIcon },
-  { id: "layers", label: "Layers", Icon: LayersIcon },
-  { id: "markers", label: "Markers", Icon: MarkersIcon },
+  { id: "theme", label: "Style", Icon: ThemeIcon },
+  { id: "layout", label: "Size", Icon: LayoutIcon },
+  { id: "style", label: "Text", Icon: StyleIcon },
+  { id: "layers", label: "Details", Icon: LayersIcon },
+  { id: "markers", label: "Pins", Icon: MarkersIcon },
 ];
 
 interface DesktopNavBarProps {
@@ -42,12 +42,12 @@ export default function DesktopNavBar({
         type="button"
         className={`desktop-nav-tab${isLocationVisible ? " is-active" : ""}`}
         onClick={onLocationToggle}
-        title={isLocationVisible ? "Hide location row" : "Show location row"}
-        aria-label={isLocationVisible ? "Hide location row" : "Show location row"}
+        title={isLocationVisible ? "Hide location" : "Show location"}
+        aria-label={isLocationVisible ? "Hide location" : "Show location"}
         aria-pressed={isLocationVisible}
       >
         <LocationIcon className="desktop-nav-icon" />
-        <span className="desktop-nav-label">Location</span>
+        <span className="desktop-nav-label">Place</span>
       </button>
 
       {tabs.map(({ id, label, Icon }) => (
