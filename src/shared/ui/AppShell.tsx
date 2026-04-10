@@ -14,7 +14,6 @@ import { useSwipeDown } from "@/shared/hooks/useSwipeDown";
 import StartupLocationModal from "@/features/location/ui/StartupLocationModal";
 import { CheckIcon } from "@/shared/ui/Icons";
 
-const AboutModal = lazy(() => import("@/shared/ui/AboutModal"));
 const SettingsPanel = lazy(() => import("@/features/poster/ui/SettingsPanel"));
 const AnnouncementModal = lazy(
   () => import("@/features/updates/ui/AnnouncementModal"),
@@ -81,7 +80,6 @@ export default function AppShell() {
   const [desktopPanelOpen, setDesktopPanelOpen] = useState(false);
   const [desktopLocationRowVisible, setDesktopLocationRowVisible] =
     useState(true);
-  const [aboutOpen, setAboutOpen] = useState(false);
   useEffect(() => {
     const preload = () => {
       void import("@/features/poster/ui/SettingsPanel");
@@ -184,7 +182,7 @@ export default function AppShell() {
       data-mobile-tab={mobileTab}
       data-desktop-tab={desktopTab}
     >
-      <GeneralHeader onAboutOpen={() => setAboutOpen(true)} />
+      <GeneralHeader />
       <InstallPrompt />
       <StartupLocationModal />
 
@@ -287,11 +285,7 @@ export default function AppShell() {
       <Suspense fallback={null}>
         <AnnouncementModal />
       </Suspense>
-      {aboutOpen ? (
-        <Suspense fallback={null}>
-          <AboutModal onClose={() => setAboutOpen(false)} />
-        </Suspense>
-      ) : null}
+
     </div>
   );
 }

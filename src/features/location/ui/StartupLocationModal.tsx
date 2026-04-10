@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   DEFAULT_CITY,
   DEFAULT_COUNTRY,
@@ -20,6 +20,8 @@ import type { SearchResult } from "@/features/location/domain/types";
 const CLOSE_ANIMATION_MS = 220;
 const DEFAULT_LOCATION_LABEL = "Hanover, Region Hannover, Lower Saxony, Germany";
 
+type InputMode = "search" | "coords";
+
 interface PendingLocation {
   label: string;
   lat: number;
@@ -29,21 +31,24 @@ interface PendingLocation {
   continent: string;
 }
 
-interface StartupLocationModalProps {
-  onComplete?: () => void;
-}
-
-export default function StartupLocationModal({
-  onComplete,
-}: StartupLocationModalProps) {
+export default function StartupLocationModal() {
   const { dispatch } = usePosterDispatch();
   const [isOpen, setIsOpen] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
+  const [mode, setMode] = useState<InputMode>("search");
+
+  // Search mode state
   const [locationInput, setLocationInput] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [pendingLocation, setPendingLocation] = useState<PendingLocation | null>(null);
+
+  // Coords mode state
+  const [latInput, setLatInput] = useState("");
+  const [lonInput, setLonInput] = useState("");
+
   const [isResolving, setIsResolving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   const { locationSuggestions, isLocationSearching, clearLocationSuggestions, searchNow } =
     useLocationAutocomplete(locationInput, isInputFocused);
 
@@ -51,10 +56,7 @@ export default function StartupLocationModal({
 
   const closeModal = () => {
     setIsClosing(true);
-    window.setTimeout(() => {
-      setIsOpen(false);
-      onComplete?.();
-    }, CLOSE_ANIMATION_MS);
+    window.setTimeout(() => setIsOpen(false), CLOSE_ANIMATION_MS);
   };
 
   const applyResolvedLocation = (location: PendingLocation | null) => {
@@ -75,7 +77,6 @@ export default function StartupLocationModal({
       });
       return;
     }
-
     dispatch({
       type: "SET_FORM_FIELDS",
       resetDisplayNameOverrides: true,
@@ -104,10 +105,7 @@ export default function StartupLocationModal({
   };
 
   const handleUseMyLocation = () => {
-    if (isResolving) {
-      return;
-    }
-
+    if (isResolving) return;
     setIsResolving(true);
     setErrorMessage("");
     void (async () => {
@@ -115,26 +113,17 @@ export default function StartupLocationModal({
         timeoutMs: GEOLOCATION_TIMEOUT_MS,
         maxAttempts: 2,
       });
-
       if (!positionResult.ok) {
-        setErrorMessage(
-          getGeolocationFailureMessage(positionResult.reason, {
-            includeManualFallback: true,
-          }),
-        );
+        setErrorMessage(getGeolocationFailureMessage(positionResult.reason, { includeManualFallback: true }));
         setIsResolving(false);
         return;
       }
-
       const { lat, lon } = positionResult;
       try {
         const resolved = await reverseGeocodeCoordinates(lat, lon);
         const pending: PendingLocation = {
-          label:
-            String(resolved.label ?? "").trim() ||
-            `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
-          lat,
-          lon,
+          label: String(resolved.label ?? "").trim() || `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
+          lat, lon,
           city: String(resolved.city ?? "").trim(),
           country: String(resolved.country ?? "").trim(),
           continent: String(resolved.continent ?? "").trim(),
@@ -143,15 +132,7 @@ export default function StartupLocationModal({
         setLocationInput(pending.label);
       } catch {
         const label = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-        const pending: PendingLocation = {
-          label,
-          lat,
-          lon,
-          city: "",
-          country: "",
-          continent: "",
-        };
-        setPendingLocation(pending);
+        setPendingLocation({ label, lat, lon, city: "", country: "", continent: "" });
         setLocationInput(label);
       } finally {
         setIsResolving(false);
@@ -173,14 +154,10 @@ export default function StartupLocationModal({
     clearLocationSuggestions();
   };
 
-  const handleConfirm = async () => {
-    if (isResolving) {
-      return;
-    }
-
+  const handleConfirmSearch = async () => {
+    if (isResolving) return;
     setIsResolving(true);
     setErrorMessage("");
-
     const query = locationInput.trim();
     if (!query) {
       applyResolvedLocation(null);
@@ -188,14 +165,12 @@ export default function StartupLocationModal({
       setIsResolving(false);
       return;
     }
-
     if (pendingLocation && pendingLocation.label === query) {
       applyResolvedLocation(pendingLocation);
       closeModal();
       setIsResolving(false);
       return;
     }
-
     try {
       const resolved = await geocodeLocation(query);
       applyResolvedLocation({
@@ -214,9 +189,39 @@ export default function StartupLocationModal({
     }
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  const handleConfirmCoords = async () => {
+    if (isResolving) return;
+    const lat = parseFloat(latInput.trim());
+    const lon = parseFloat(lonInput.trim());
+    if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      setErrorMessage("Enter valid coordinates. Latitude: -90 to 90, Longitude: -180 to 180.");
+      return;
+    }
+    setIsResolving(true);
+    setErrorMessage("");
+    try {
+      const resolved = await reverseGeocodeCoordinates(lat, lon);
+      applyResolvedLocation({
+        label: String(resolved.label ?? "").trim() || `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
+        lat, lon,
+        city: String(resolved.city ?? "").trim(),
+        country: String(resolved.country ?? "").trim(),
+        continent: String(resolved.continent ?? "").trim(),
+      });
+      closeModal();
+    } catch {
+      // Apply with coords as label even if reverse geocode fails
+      applyResolvedLocation({
+        label: `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
+        lat, lon, city: "", country: "", continent: "",
+      });
+      closeModal();
+    } finally {
+      setIsResolving(false);
+    }
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -234,61 +239,119 @@ export default function StartupLocationModal({
         <p className="startup-location-title" id="startup-location-title">
           Choose Location
         </p>
-        <input
-          type="text"
-          className="startup-location-input"
-          value={locationInput}
-          onChange={(event) => {
-            setLocationInput(event.target.value);
-            setPendingLocation(null);
-            // Restore focus state when user types after selecting a suggestion
-            // (DOM focus may still be on the input, so onFocus won't re-fire).
-            if (!isInputFocused) setIsInputFocused(true);
-          }}
-          onFocus={() => setIsInputFocused(true)}
-          onBlur={() => setTimeout(() => setIsInputFocused(false), 120)}
-          onKeyDown={(e) => { if (e.key === "Enter") void searchNow(e.currentTarget.value); }}
-          placeholder="Type a city or place"
-          autoComplete="off"
-        />
-        {showSuggestions ? (
-          <ul className="startup-location-suggestions" role="listbox">
-            {locationSuggestions.map((suggestion) => (
-              <li key={suggestion.id}>
-                <button
-                  type="button"
-                  className="startup-location-suggestion"
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    onSuggestionSelect(suggestion);
-                  }}
-                >
-                  {suggestion.label}
-                </button>
-              </li>
-            ))}
-            {isLocationSearching ? (
-              <li className="startup-location-suggestion-status">Searching...</li>
+
+        {/* Mode toggle */}
+        <div className="startup-location-mode-tabs">
+          <button
+            type="button"
+            className={`startup-location-mode-tab${mode === "search" ? " is-active" : ""}`}
+            onClick={() => { setMode("search"); setErrorMessage(""); }}
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            className={`startup-location-mode-tab${mode === "coords" ? " is-active" : ""}`}
+            onClick={() => { setMode("coords"); setErrorMessage(""); }}
+          >
+            Coordinates
+          </button>
+        </div>
+
+        {mode === "search" ? (
+          <>
+            <input
+              type="text"
+              className="startup-location-input"
+              value={locationInput}
+              onChange={(e) => {
+                setLocationInput(e.target.value);
+                setPendingLocation(null);
+                if (!isInputFocused) setIsInputFocused(true);
+              }}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setTimeout(() => setIsInputFocused(false), 120)}
+              onKeyDown={(e) => { if (e.key === "Enter") void searchNow(e.currentTarget.value); }}
+              placeholder="Type a city or place"
+              autoComplete="off"
+            />
+            {showSuggestions ? (
+              <ul className="startup-location-suggestions" role="listbox">
+                {locationSuggestions.map((suggestion) => (
+                  <li key={suggestion.id}>
+                    <button
+                      type="button"
+                      className="startup-location-suggestion"
+                      onMouseDown={(e) => { e.preventDefault(); onSuggestionSelect(suggestion); }}
+                    >
+                      {suggestion.label}
+                    </button>
+                  </li>
+                ))}
+                {isLocationSearching ? (
+                  <li className="startup-location-suggestion-status">Searching...</li>
+                ) : null}
+              </ul>
             ) : null}
-          </ul>
-        ) : null}
-        <button
-          type="button"
-          className="startup-location-action startup-location-action--geo"
-          onClick={handleUseMyLocation}
-          disabled={isResolving}
-        >
-          <MyLocationIcon />
-          <span>{isResolving ? "Locating..." : "Get my location"}</span>
-        </button>
-        <button
-          type="button"
-          className="startup-location-action startup-location-action--confirm"
-          onClick={() => void handleConfirm()}
-          disabled={isResolving}
-        >
-          OK
-        </button>
+            <button
+              type="button"
+              className="startup-location-action startup-location-action--geo"
+              onClick={handleUseMyLocation}
+              disabled={isResolving}
+            >
+              <MyLocationIcon />
+              <span>{isResolving ? "Locating..." : "Get my location"}</span>
+            </button>
+            <button
+              type="button"
+              className="startup-location-action startup-location-action--confirm"
+              onClick={() => void handleConfirmSearch()}
+              disabled={isResolving}
+            >
+              OK
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="startup-location-coords-row">
+              <div className="startup-location-coord-field">
+                <label className="startup-location-coord-label">Latitude</label>
+                <input
+                  type="number"
+                  className="startup-location-input startup-location-input--coord"
+                  value={latInput}
+                  onChange={(e) => setLatInput(e.target.value)}
+                  placeholder="e.g. 19.0760"
+                  min="-90"
+                  max="90"
+                  step="any"
+                />
+              </div>
+              <div className="startup-location-coord-field">
+                <label className="startup-location-coord-label">Longitude</label>
+                <input
+                  type="number"
+                  className="startup-location-input startup-location-input--coord"
+                  value={lonInput}
+                  onChange={(e) => setLonInput(e.target.value)}
+                  placeholder="e.g. 72.8777"
+                  min="-180"
+                  max="180"
+                  step="any"
+                />
+              </div>
+            </div>
+            <button
+              type="button"
+              className="startup-location-action startup-location-action--confirm"
+              onClick={() => void handleConfirmCoords()}
+              disabled={isResolving}
+            >
+              {isResolving ? "Resolving..." : "Go"}
+            </button>
+          </>
+        )}
+
         {errorMessage ? (
           <p className="startup-location-error" role="status">
             {errorMessage}

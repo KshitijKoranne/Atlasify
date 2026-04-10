@@ -697,3 +697,72 @@ button.install-prompt-dismiss:hover {
     transform: scale(1) rotate(0deg);
   }
 }
+
+/* ── Startup modal: mode tabs (Search / Coordinates) ── */
+.startup-location-mode-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 9px;
+  padding: 3px;
+}
+
+.startup-location-mode-tab {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: rgba(180, 210, 230, 0.5);
+  font-family: "Spline Sans Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.startup-location-mode-tab.is-active {
+  background: rgba(196, 148, 60, 0.18);
+  color: #e8b84a;
+}
+
+.startup-location-mode-tab:not(.is-active):hover {
+  background: rgba(255,255,255,0.06);
+  color: rgba(200, 225, 245, 0.75);
+}
+
+/* ── Coords row ── */
+.startup-location-coords-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.startup-location-coord-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.startup-location-coord-label {
+  font-family: "Spline Sans Mono", monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(180, 210, 230, 0.55);
+}
+
+.startup-location-input--coord {
+  -moz-appearance: textfield;
+}
+
+.startup-location-input--coord::-webkit-outer-spin-button,
+.startup-location-input--coord::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
