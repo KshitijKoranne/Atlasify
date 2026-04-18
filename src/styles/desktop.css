@@ -39,9 +39,12 @@
 @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
   /* ── Prevent body scroll; app fills viewport ── */
 
-  html,
-  body,
-  #root {
+  html[data-display-mode="standalone"],
+  html[data-display-mode="standalone"] body,
+  html[data-display-mode="standalone"] #root,
+  html[data-app-mode="app"],
+  html[data-app-mode="app"] body,
+  html[data-app-mode="app"] #root {
     height: 100%;
     overflow: hidden;
   }
@@ -1144,7 +1147,7 @@
     flex-direction: column;
     align-items: stretch;
     gap: 5px;
-    width: 152px;
+    width: 168px;
     padding: 12px 10px;
     background: rgba(8, 15, 24, 0.97);
     border: 1px solid rgba(196, 148, 60, 0.28);
@@ -1261,6 +1264,13 @@
     background: rgba(40, 28, 4, 0.85);
     border-color: rgba(196, 148, 60, 0.3);
     color: #c8a040;
+  }
+
+  .desktop-export-tier--pro-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .desktop-export-btn-icon {

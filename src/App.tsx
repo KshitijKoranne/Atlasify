@@ -2,16 +2,16 @@ import { AppProviders } from "@/core/AppProviders";
 import AppShell from "@/shared/ui/AppShell";
 import LandingPage from "./LandingPage";
 
-function isStandalone(): boolean {
-  // Already set by main.tsx on initial load
+function isAppMode(): boolean {
   if (document.documentElement.dataset.displayMode === "standalone") return true;
-  // Also check /app path for when user navigates directly to the app
   if (window.location.pathname.startsWith("/app")) return true;
   return false;
 }
 
 export default function App() {
-  if (isStandalone()) {
+  if (isAppMode()) {
+    // Mark <html> so desktop CSS can lock scroll for the app
+    document.documentElement.dataset.appMode = "app";
     return (
       <AppProviders>
         <AppShell />
@@ -19,5 +19,7 @@ export default function App() {
     );
   }
 
+  // Landing page — remove app-mode if someone navigates back
+  delete document.documentElement.dataset.appMode;
   return <LandingPage />;
 }

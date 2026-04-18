@@ -75,10 +75,10 @@ export default function DesktopExportFab() {
           type="button"
           className="desktop-export-btn desktop-export-btn--pro"
           disabled
-          title="High-resolution export — coming soon"
+          title="2K / 4K / 8K high-res export — coming soon"
         >
           <DownloadIcon className="desktop-export-btn-icon" />
-          <span>2K / 4K / 8K</span>
+          <span className="desktop-export-tier--pro-label">Hi-Res</span>
           <span className="desktop-export-tier desktop-export-tier--pro">Pro</span>
         </button>
       </div>
