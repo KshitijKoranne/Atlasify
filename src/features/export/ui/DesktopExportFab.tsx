@@ -4,6 +4,8 @@ import type { ExportFormat } from "@/features/export/domain/types";
 import { DownloadIcon, LoaderIcon } from "@/shared/ui/Icons";
 import SupportModal from "@/features/export/ui/SupportModal";
 
+const PRO_RESOLUTIONS = ["2K", "4K", "8K"] as const;
+
 export default function DesktopExportFab() {
   const {
     isExporting,
@@ -26,7 +28,7 @@ export default function DesktopExportFab() {
       <div className="desktop-export-fab">
         <p className="desktop-export-label">Export Poster</p>
 
-        {/* Primary — PNG free tier */}
+        {/* Free tier */}
         <button
           type="button"
           className="desktop-export-btn desktop-export-btn--primary"
@@ -40,7 +42,6 @@ export default function DesktopExportFab() {
           <span className="desktop-export-tier">Free</span>
         </button>
 
-        {/* PDF */}
         <button
           type="button"
           className="desktop-export-btn desktop-export-btn--pdf"
@@ -54,7 +55,6 @@ export default function DesktopExportFab() {
           <span className="desktop-export-tier">Free</span>
         </button>
 
-        {/* SVG */}
         <button
           type="button"
           className="desktop-export-btn desktop-export-btn--svg"
@@ -70,17 +70,26 @@ export default function DesktopExportFab() {
 
         <div className="desktop-export-divider" />
 
-        {/* Pro tier — placeholder, wired to Razorpay later */}
-        <button
-          type="button"
-          className="desktop-export-btn desktop-export-btn--pro"
-          disabled
-          title="2K / 4K / 8K high-res export — coming soon"
-        >
-          <DownloadIcon className="desktop-export-btn-icon" />
-          <span className="desktop-export-tier--pro-label">Hi-Res</span>
-          <span className="desktop-export-tier desktop-export-tier--pro">Pro</span>
-        </button>
+        {/* Pro tier — separate buttons per resolution */}
+        <p className="desktop-export-pro-label">
+          <span className="desktop-export-tier--pro">Pro</span>
+          High-res
+        </p>
+        {PRO_RESOLUTIONS.map((res) => (
+          <button
+            key={res}
+            type="button"
+            className="desktop-export-btn desktop-export-btn--pro"
+            disabled
+            title={`${res} export — coming soon with Razorpay`}
+          >
+            <DownloadIcon className="desktop-export-btn-icon" />
+            <span>{res}</span>
+            <span className="desktop-export-pro-res">{
+              res === "2K" ? "2048px" : res === "4K" ? "4096px" : "8192px"
+            }</span>
+          </button>
+        ))}
       </div>
 
       {supportPrompt ? (

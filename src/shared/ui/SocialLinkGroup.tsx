@@ -9,7 +9,7 @@ interface SocialLinkGroupProps {
 export default function SocialLinkGroup({ variant }: SocialLinkGroupProps) {
   const repoUrl = String(REPO_URL ?? "").trim();
   const repoApiUrl = String(REPO_API_URL ?? "").trim();
-  const xUrl = String(SOCIAL_X ?? "").trim();
+  const xUrl = String(SOCIAL_X ?? "").trim() || "https://x.com/kshitijkoranne";
   const kofiUrl = String(KOFI_URL ?? "").trim();
   const { repoStars, repoStarsLoading } = useRepoStars(repoApiUrl);
   const starsText = repoStarsLoading ? "..." : repoStars?.toLocaleString() ?? "Star";
