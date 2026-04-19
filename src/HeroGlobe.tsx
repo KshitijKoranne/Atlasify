@@ -89,8 +89,8 @@ export default function HeroGlobe() {
       // Globe outline
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(196, 148, 60, 0.08)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(196, 148, 60, 0.18)";
+      ctx.lineWidth = 1.2;
       ctx.stroke();
 
       // Latitude lines
@@ -103,8 +103,8 @@ export default function HeroGlobe() {
           if (!started) { ctx.moveTo(p.x, p.y); started = true; }
           else ctx.lineTo(p.x, p.y);
         }
-        ctx.strokeStyle = "rgba(196, 148, 60, 0.04)";
-        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = "rgba(196, 148, 60, 0.12)";
+        ctx.lineWidth = 0.7;
         ctx.stroke();
       }
 
@@ -118,8 +118,8 @@ export default function HeroGlobe() {
           if (!started) { ctx.moveTo(p.x, p.y); started = true; }
           else ctx.lineTo(p.x, p.y);
         }
-        ctx.strokeStyle = "rgba(196, 148, 60, 0.04)";
-        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = "rgba(196, 148, 60, 0.12)";
+        ctx.lineWidth = 0.7;
         ctx.stroke();
       }
 
@@ -132,18 +132,24 @@ export default function HeroGlobe() {
 
         // Staggered pulse per city
         const cityPulse = 0.4 + 0.6 * Math.sin(t * 0.003 + i * 0.8);
-        const dotR = 1.5 + cityPulse * 1.2;
+        const dotR = 2 + cityPulse * 1.5;
 
-        // Glow
+        // Outer glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, dotR + 6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 164, 58, ${0.1 * cityPulse})`;
+        ctx.fill();
+
+        // Inner glow
         ctx.beginPath();
         ctx.arc(p.x, p.y, dotR + 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 164, 58, ${0.06 * cityPulse})`;
+        ctx.fillStyle = `rgba(212, 164, 58, ${0.15 * cityPulse})`;
         ctx.fill();
 
         // Dot
         ctx.beginPath();
         ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 164, 58, ${0.25 + 0.35 * cityPulse})`;
+        ctx.fillStyle = `rgba(212, 164, 58, ${0.5 + 0.4 * cityPulse})`;
         ctx.fill();
       }
 

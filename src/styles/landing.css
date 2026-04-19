@@ -119,7 +119,7 @@ html:not([data-app-mode]) #root {
   width: 520px;
   height: 520px;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .lp-hero-inner {
@@ -568,7 +568,7 @@ html:not([data-app-mode]) #root {
     width: 350px;
     height: 350px;
     left: 50%;
-    opacity: 0.4;
+    opacity: 0.6;
   }
 
   .lp-marquee-card { width: 140px; }
