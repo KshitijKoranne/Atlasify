@@ -1,4 +1,5 @@
 import { useState } from "react";
+import HeroGlobe from "./HeroGlobe";
 import "./styles/landing.css";
 
 const HERO_POSTERS = [
@@ -69,6 +70,7 @@ export default function LandingPage() {
       {/* ── Hero ── */}
       <section className="lp-hero">
         <div className="lp-hero-glow" aria-hidden="true" />
+        <HeroGlobe />
 
         <div className="lp-hero-inner">
           <div className="lp-hero-content">
