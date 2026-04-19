@@ -1,24 +1,34 @@
+import { useState } from "react";
 import "./styles/landing.css";
 
-const POSTERS = [
-  { src: "/assets/posters/hannover-atlas.webp", city: "Atlas", theme: "Atlas" },
-  { src: "/assets/posters/amsterdam-terracotta.webp", city: "Amsterdam", theme: "Terracotta" },
-  { src: "/assets/posters/tokyo-blueprint.webp", city: "Tokyo", theme: "Blueprint" },
-  { src: "/assets/posters/singapore-cyberpunk.webp", city: "Singapore", theme: "Cyberpunk" },
-  { src: "/assets/posters/rio-emerald.webp", city: "Rio", theme: "Emerald" },
-  { src: "/assets/posters/london-monochrome.webp", city: "London", theme: "Monochrome" },
-  { src: "/assets/posters/rome-ember.webp", city: "Rome", theme: "Ember" },
-  { src: "/assets/posters/halifax-mist.webp", city: "Halifax", theme: "Mist" },
-  { src: "/assets/posters/budapest-ruby.webp", city: "Budapest", theme: "Ruby" },
-  { src: "/assets/posters/capetown-noir.webp", city: "Cape Town", theme: "Noir" },
-  { src: "/assets/posters/seattle-sand.webp", city: "Seattle", theme: "Sand" },
-  { src: "/assets/posters/baghdad-parchment.webp", city: "Baghdad", theme: "Parchment" },
+const HERO_POSTERS = [
+  { src: "/assets/posters/budapest-ruby.webp", city: "Budapest" },
+  { src: "/assets/posters/rome-ember.webp", city: "Rome" },
+  { src: "/assets/posters/amsterdam-terracotta.webp", city: "Amsterdam" },
+  { src: "/assets/posters/tokyo-blueprint.webp", city: "Tokyo" },
+  { src: "/assets/posters/singapore-cyberpunk.webp", city: "Singapore" },
+  { src: "/assets/posters/hannover-atlas.webp", city: "Hannover" },
+];
+
+const MARQUEE_POSTERS = [
+  { src: "/assets/posters/hannover-atlas.webp", city: "Hannover" },
+  { src: "/assets/posters/amsterdam-terracotta.webp", city: "Amsterdam" },
+  { src: "/assets/posters/tokyo-blueprint.webp", city: "Tokyo" },
+  { src: "/assets/posters/singapore-cyberpunk.webp", city: "Singapore" },
+  { src: "/assets/posters/rio-emerald.webp", city: "Rio de Janeiro" },
+  { src: "/assets/posters/london-monochrome.webp", city: "London" },
+  { src: "/assets/posters/rome-ember.webp", city: "Rome" },
+  { src: "/assets/posters/halifax-mist.webp", city: "Halifax" },
+  { src: "/assets/posters/budapest-ruby.webp", city: "Budapest" },
+  { src: "/assets/posters/capetown-noir.webp", city: "Cape Town" },
+  { src: "/assets/posters/seattle-sand.webp", city: "Seattle" },
+  { src: "/assets/posters/baghdad-parchment.webp", city: "Baghdad" },
 ];
 
 const FEATURES = [
   { icon: "◎", title: "23 Themes", body: "From Atlas to Cyberpunk — every theme is designed for print." },
   { icon: "⊞", title: "Any Size", body: "A4, A3, 4K wallpaper, social posts, or fully custom dimensions." },
-  { icon: "↓", title: "Export Anything", body: "Free PNG, PDF, and SVG. Pay once for hi-res 2K, 4K, or 8K." },
+  { icon: "↓", title: "Export Anything", body: "PNG, PDF, and SVG included. Hi-res 2K, 4K, and 8K available." },
   { icon: "✦", title: "Fully Custom", body: "Colors, typography, map layers, markers — all yours to tweak." },
   { icon: "⌖", title: "Any Location", body: "Search any city or drop in exact lat/lon coordinates." },
   { icon: "◈", title: "Works Offline", body: "Install as a PWA. Create posters without an internet connection." },
@@ -26,6 +36,16 @@ const FEATURES = [
 
 export default function LandingPage() {
   const openApp = () => { window.location.href = "/app"; };
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  const cyclePosters = () => {
+    setHeroIndex((prev) => (prev + 1) % HERO_POSTERS.length);
+  };
+
+  // Pick 3 posters from the rotating index
+  const back = HERO_POSTERS[heroIndex % HERO_POSTERS.length];
+  const mid = HERO_POSTERS[(heroIndex + 1) % HERO_POSTERS.length];
+  const front = HERO_POSTERS[(heroIndex + 2) % HERO_POSTERS.length];
 
   return (
     <div className="lp-root">
@@ -52,13 +72,13 @@ export default function LandingPage() {
 
         <div className="lp-hero-inner">
           <div className="lp-hero-content">
-            <div className="lp-hero-badge">Free · No sign-up · Works in browser</div>
+            <div className="lp-hero-badge">No sign-up · Works in browser</div>
             <h1 className="lp-hero-heading">
               Turn any place<br />into a poster.
             </h1>
             <p className="lp-hero-sub">
-              Search a city, pick a theme, export a print-ready map poster.
-              23 themes. Seconds, not hours.
+              Search a city, pick from 23 themes, export a print-ready
+              map poster. Standard exports are free — hi-res from just ₹99.
             </p>
             <div className="lp-hero-actions">
               <button type="button" className="lp-btn-primary" onClick={openApp}>
@@ -70,11 +90,11 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Hero poster trio — real images */}
-          <div className="lp-poster-stack" aria-hidden="true">
-            <img src="/assets/posters/budapest-ruby.webp" alt="" className="lp-poster lp-poster--back" loading="eager" />
-            <img src="/assets/posters/rome-ember.webp" alt="" className="lp-poster lp-poster--mid" loading="eager" />
-            <img src="/assets/posters/amsterdam-terracotta.webp" alt="" className="lp-poster lp-poster--front" loading="eager" />
+          {/* Hero poster trio — tappable to rotate */}
+          <div className="lp-poster-stack" onClick={cyclePosters} role="button" tabIndex={0} aria-label="Tap to see more poster examples" onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") cyclePosters(); }}>
+            <img src={back.src} alt={back.city} className="lp-poster lp-poster--back" loading="eager" />
+            <img src={mid.src} alt={mid.city} className="lp-poster lp-poster--mid" loading="eager" />
+            <img src={front.src} alt={front.city} className="lp-poster lp-poster--front" loading="eager" />
           </div>
         </div>
       </section>
@@ -82,12 +102,11 @@ export default function LandingPage() {
       {/* ── Poster marquee ── */}
       <section className="lp-marquee" aria-label="Example map posters created with Atlasify">
         <div className="lp-marquee-track">
-          {[...POSTERS, ...POSTERS].map((p, i) => (
+          {[...MARQUEE_POSTERS, ...MARQUEE_POSTERS].map((p, i) => (
             <div key={i} className="lp-marquee-card">
-              <img src={p.src} alt={`${p.city} map poster — ${p.theme} theme`} className="lp-marquee-img" loading="lazy" />
+              <img src={p.src} alt={`${p.city} map poster`} className="lp-marquee-img" loading="lazy" />
               <div className="lp-marquee-label">
                 <span className="lp-marquee-city">{p.city}</span>
-                <span className="lp-marquee-theme">{p.theme}</span>
               </div>
             </div>
           ))}
@@ -129,7 +148,7 @@ export default function LandingPage() {
           <div className="lp-step">
             <div className="lp-step-num">03</div>
             <h3 className="lp-step-title">Export & print</h3>
-            <p className="lp-step-body">Download PNG, PDF, or SVG free. Upgrade once for hi-res 2K, 4K, or 8K.</p>
+            <p className="lp-step-body">Standard PNG, PDF, SVG — free. Hi-res 2K, 4K, 8K — one-time purchase.</p>
           </div>
         </div>
       </section>
@@ -139,9 +158,9 @@ export default function LandingPage() {
         <div className="lp-cta-glow" aria-hidden="true" />
         <h2 className="lp-cta-heading">Your city. Your style.<br />Your wall.</h2>
         <button type="button" className="lp-btn-primary lp-btn-primary--large" onClick={openApp}>
-          Create for free
+          Start creating
         </button>
-        <p className="lp-cta-sub">No account needed. No credit card. Works in any modern browser.</p>
+        <p className="lp-cta-sub">No account needed. Standard exports are free.</p>
       </section>
 
       {/* ── Footer ── */}
