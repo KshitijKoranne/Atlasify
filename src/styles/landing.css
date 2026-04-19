@@ -116,10 +116,11 @@ html:not([data-app-mode]) #root {
   top: 50%;
   left: 28%;
   transform: translate(-50%, -50%);
-  width: 520px;
-  height: 520px;
+  width: 600px;
+  height: 600px;
   pointer-events: none;
-  opacity: 1;
+  opacity: 0.85;
+  max-width: none;
 }
 
 .lp-hero-inner {
@@ -565,10 +566,10 @@ html:not([data-app-mode]) #root {
   .lp-poster--front { transform: rotate(5deg) translateX(55px) translateY(6px); }
 
   .lp-hero-globe {
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
     left: 50%;
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
   .lp-marquee-card { width: 140px; }

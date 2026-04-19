@@ -1,166 +1,64 @@
 import { useEffect, useRef } from "react";
+import createGlobe from "cobe";
 
-/** Major world cities: [lat, lon] */
-const CITIES: [number, number][] = [
-  [48.86, 2.35],    // Paris
-  [40.71, -74.01],  // New York
-  [35.68, 139.69],  // Tokyo
-  [51.51, -0.13],   // London
-  [-22.91, -43.17], // Rio
-  [1.35, 103.82],   // Singapore
-  [55.76, 37.62],   // Moscow
-  [19.08, 72.88],   // Mumbai
-  [-33.87, 151.21], // Sydney
-  [30.04, 31.24],   // Cairo
-  [37.77, -122.42], // San Francisco
-  [-34.60, -58.38], // Buenos Aires
-  [22.31, 73.18],   // Vadodara
-  [47.50, 19.04],   // Budapest
-  [52.37, 9.73],    // Hannover
-  [41.90, 12.50],   // Rome
-  [52.37, 4.90],    // Amsterdam
-  [-33.92, 18.42],  // Cape Town
-  [47.61, -122.33], // Seattle
-  [33.31, 44.37],   // Baghdad
-  [44.65, -63.57],  // Halifax
-  [39.91, 116.40],  // Beijing
-  [13.76, 100.50],  // Bangkok
-  [-1.29, 36.82],   // Nairobi
-  [64.15, -21.94],  // Reykjavik
-];
-
-function project(
-  lat: number,
-  lon: number,
-  rotY: number,
-  cx: number,
-  cy: number,
-  r: number,
-): { x: number; y: number; visible: boolean } {
-  const phi = (lat * Math.PI) / 180;
-  const lam = ((lon - rotY) * Math.PI) / 180;
-
-  const cosP = Math.cos(phi);
-  const x3 = cosP * Math.sin(lam);
-  const y3 = -Math.sin(phi);
-  const z3 = cosP * Math.cos(lam);
-
-  return {
-    x: cx + x3 * r,
-    y: cy + y3 * r,
-    visible: z3 > 0,
-  };
-}
+const MARKERS = [
+  { location: [48.86, 2.35], size: 0.04 },     // Paris
+  { location: [40.71, -74.01], size: 0.05 },    // New York
+  { location: [35.68, 139.69], size: 0.05 },    // Tokyo
+  { location: [51.51, -0.13], size: 0.04 },     // London
+  { location: [-22.91, -43.17], size: 0.04 },   // Rio
+  { location: [1.35, 103.82], size: 0.04 },     // Singapore
+  { location: [55.76, 37.62], size: 0.04 },     // Moscow
+  { location: [19.08, 72.88], size: 0.04 },     // Mumbai
+  { location: [-33.87, 151.21], size: 0.04 },   // Sydney
+  { location: [30.04, 31.24], size: 0.03 },     // Cairo
+  { location: [22.31, 73.18], size: 0.04 },     // Vadodara
+  { location: [47.50, 19.04], size: 0.03 },     // Budapest
+  { location: [41.90, 12.50], size: 0.04 },     // Rome
+  { location: [52.37, 4.90], size: 0.03 },      // Amsterdam
+  { location: [-33.92, 18.42], size: 0.03 },    // Cape Town
+  { location: [13.76, 100.50], size: 0.03 },    // Bangkok
+  { location: [-1.29, 36.82], size: 0.03 },     // Nairobi
+  { location: [39.91, 116.40], size: 0.04 },    // Beijing
+  { location: [37.77, -122.42], size: 0.04 },   // San Francisco
+  { location: [-34.60, -58.38], size: 0.03 },   // Buenos Aires
+] as const;
 
 export default function HeroGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frameRef = useRef(0);
+  const phiRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
 
-    let raf: number;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const width = 600;
+    const dpr = Math.min(window.devicePixelRatio, 2);
 
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const draw = (t: number) => {
-      const w = canvas.width / dpr;
-      const h = canvas.height / dpr;
-      const cx = w / 2;
-      const cy = h / 2;
-      const r = Math.min(cx, cy) * 0.82;
-
-      // Slow rotation: full turn in ~60s
-      const rotY = (t * 0.006) % 360;
-
-      ctx.clearRect(0, 0, w, h);
-
-      // Globe outline
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(196, 148, 60, 0.18)";
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
-
-      // Latitude lines
-      for (let lat = -60; lat <= 60; lat += 30) {
-        ctx.beginPath();
-        let started = false;
-        for (let lon = -180; lon <= 180; lon += 3) {
-          const p = project(lat, lon, rotY, cx, cy, r);
-          if (!p.visible) { started = false; continue; }
-          if (!started) { ctx.moveTo(p.x, p.y); started = true; }
-          else ctx.lineTo(p.x, p.y);
-        }
-        ctx.strokeStyle = "rgba(196, 148, 60, 0.12)";
-        ctx.lineWidth = 0.7;
-        ctx.stroke();
-      }
-
-      // Longitude lines
-      for (let lon = -180; lon < 180; lon += 30) {
-        ctx.beginPath();
-        let started = false;
-        for (let lat = -90; lat <= 90; lat += 3) {
-          const p = project(lat, lon, rotY, cx, cy, r);
-          if (!p.visible) { started = false; continue; }
-          if (!started) { ctx.moveTo(p.x, p.y); started = true; }
-          else ctx.lineTo(p.x, p.y);
-        }
-        ctx.strokeStyle = "rgba(196, 148, 60, 0.12)";
-        ctx.lineWidth = 0.7;
-        ctx.stroke();
-      }
-
-      // City dots
-      const pulse = 0.5 + 0.5 * Math.sin(t * 0.003);
-      for (let i = 0; i < CITIES.length; i++) {
-        const [lat, lon] = CITIES[i];
-        const p = project(lat, lon, rotY, cx, cy, r);
-        if (!p.visible) continue;
-
-        // Staggered pulse per city
-        const cityPulse = 0.4 + 0.6 * Math.sin(t * 0.003 + i * 0.8);
-        const dotR = 2 + cityPulse * 1.5;
-
-        // Outer glow
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dotR + 6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 164, 58, ${0.1 * cityPulse})`;
-        ctx.fill();
-
-        // Inner glow
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dotR + 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 164, 58, ${0.15 * cityPulse})`;
-        ctx.fill();
-
-        // Dot
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212, 164, 58, ${0.5 + 0.4 * cityPulse})`;
-        ctx.fill();
-      }
-
-      raf = requestAnimationFrame(draw);
-    };
-
-    raf = requestAnimationFrame(draw);
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: dpr,
+      width: width * dpr,
+      height: width * dpr,
+      phi: 0,
+      theta: 0.25,
+      dark: 1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 4,
+      baseColor: [0.15, 0.12, 0.08],
+      markerColor: [0.83, 0.64, 0.23],
+      glowColor: [0.12, 0.09, 0.04],
+      markers: MARKERS as unknown as Array<{ location: [number, number]; size: number }>,
+      scale: 1,
+      offset: [0, 0],
+      onRender: (state) => {
+        state.phi = phiRef.current;
+        phiRef.current += 0.003;
+      },
+    });
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
+      globe.destroy();
     };
   }, []);
 
@@ -169,6 +67,7 @@ export default function HeroGlobe() {
       ref={canvasRef}
       className="lp-hero-globe"
       aria-hidden="true"
+      style={{ width: 600, height: 600 }}
     />
   );
 }
