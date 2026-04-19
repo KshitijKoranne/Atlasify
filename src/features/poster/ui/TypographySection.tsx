@@ -35,7 +35,7 @@ function CreditsRemovalModal({
       >
         <div className="credits-modal__body">
           <p className="credits-modal__headline" id="credits-modal-title">
-            ✨ Wait! Did you know Atlasify is open-source?
+            ✨ Wait! Did you know Atlasify is free to use?
           </p>
           <p className="credits-modal__text">
             Keeping the credit visible helps more people find this tool and
@@ -191,7 +191,7 @@ export default function TypographySection({
           </span>
         </label>
         <p className="credits-hint">
-          Keep this enabled to help others discover this open-source project and
+          Keep this enabled to help others discover Atlasify and
           support future updates!
         </p>
       </section>

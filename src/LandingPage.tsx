@@ -1,14 +1,27 @@
 import "./styles/landing.css";
 
-const THEMES = ["Atlas", "Cyberpunk", "Ember", "Saffron", "Noir", "Terracotta", "Arctic", "Dusk"];
+const POSTERS = [
+  { src: "/assets/posters/hannover-atlas.webp", city: "Atlas", theme: "Atlas" },
+  { src: "/assets/posters/amsterdam-terracotta.webp", city: "Amsterdam", theme: "Terracotta" },
+  { src: "/assets/posters/tokyo-blueprint.webp", city: "Tokyo", theme: "Blueprint" },
+  { src: "/assets/posters/singapore-cyberpunk.webp", city: "Singapore", theme: "Cyberpunk" },
+  { src: "/assets/posters/rio-emerald.webp", city: "Rio", theme: "Emerald" },
+  { src: "/assets/posters/london-monochrome.webp", city: "London", theme: "Monochrome" },
+  { src: "/assets/posters/rome-ember.webp", city: "Rome", theme: "Ember" },
+  { src: "/assets/posters/halifax-mist.webp", city: "Halifax", theme: "Mist" },
+  { src: "/assets/posters/budapest-ruby.webp", city: "Budapest", theme: "Ruby" },
+  { src: "/assets/posters/capetown-noir.webp", city: "Cape Town", theme: "Noir" },
+  { src: "/assets/posters/seattle-sand.webp", city: "Seattle", theme: "Sand" },
+  { src: "/assets/posters/baghdad-parchment.webp", city: "Baghdad", theme: "Parchment" },
+];
 
 const FEATURES = [
-  { icon: "◎", title: "23 Themes", body: "From Atlas to Cyberpunk. Every theme is built for print." },
-  { icon: "⊞", title: "Any Size", body: "A4, A3, 4K wallpaper, social media — or fully custom." },
-  { icon: "↓", title: "Export Ready", body: "PNG, PDF, and SVG. High-res 2K/4K/8K exports coming soon." },
-  { icon: "✦", title: "Fully Custom", body: "Edit colors, typography, markers, and map layers freely." },
-  { icon: "⌖", title: "Any Location", body: "Search any city or drop in exact coordinates." },
-  { icon: "◈", title: "Works Offline", body: "Install as a PWA and use it without a connection." },
+  { icon: "◎", title: "23 Themes", body: "From Atlas to Cyberpunk — every theme is designed for print." },
+  { icon: "⊞", title: "Any Size", body: "A4, A3, 4K wallpaper, social posts, or fully custom dimensions." },
+  { icon: "↓", title: "Export Anything", body: "Free PNG, PDF, and SVG. Pay once for hi-res 2K, 4K, or 8K." },
+  { icon: "✦", title: "Fully Custom", body: "Colors, typography, map layers, markers — all yours to tweak." },
+  { icon: "⌖", title: "Any Location", body: "Search any city or drop in exact lat/lon coordinates." },
+  { icon: "◈", title: "Works Offline", body: "Install as a PWA. Create posters without an internet connection." },
 ];
 
 export default function LandingPage() {
@@ -20,12 +33,12 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav className="lp-nav">
         <div className="lp-nav-brand">
-          <img src="/assets/logo.svg" alt="" className="lp-nav-logo" />
+          <img src="/assets/logo.svg" alt="Atlasify logo" width="26" height="26" className="lp-nav-logo" />
           <span className="lp-nav-name">Atlasify</span>
         </div>
         <div className="lp-nav-right">
-          <a href="https://x.com/kshitijkoranne" target="_blank" rel="noreferrer" className="lp-nav-link">
-            by KJR Labs
+          <a href="https://kjrlabs.in" target="_blank" rel="noreferrer" className="lp-nav-link">
+            KJR Labs
           </a>
           <button type="button" className="lp-nav-cta" onClick={openApp}>
             Open App
@@ -35,8 +48,7 @@ export default function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="lp-hero">
-        <div className="lp-hero-glow-top" aria-hidden="true" />
-        <div className="lp-hero-glow-bottom" aria-hidden="true" />
+        <div className="lp-hero-glow" aria-hidden="true" />
 
         <div className="lp-hero-inner">
           <div className="lp-hero-content">
@@ -45,52 +57,40 @@ export default function LandingPage() {
               Turn any place<br />into a poster.
             </h1>
             <p className="lp-hero-sub">
-              Pick a location, choose from 23 themes, and export a print-ready
-              map poster. In seconds.
+              Search a city, pick a theme, export a print-ready map poster.
+              23 themes. Seconds, not hours.
             </p>
             <div className="lp-hero-actions">
               <button type="button" className="lp-btn-primary" onClick={openApp}>
                 Create your poster
               </button>
               <button type="button" className="lp-btn-ghost" onClick={openApp}>
-                See themes →
+                See all 23 themes →
               </button>
             </div>
           </div>
 
-          {/* Simulated poster stack */}
+          {/* Hero poster trio — real images */}
           <div className="lp-poster-stack" aria-hidden="true">
-            <div className="lp-poster lp-poster--back" style={{ background: "linear-gradient(160deg, #1A0E2A 0%, #130A20 100%)" }}>
-              <div className="lp-poster-map-lines lp-poster-map-lines--dusk" />
-              <div className="lp-poster-text">
-                <span className="lp-poster-city">Paris</span>
-                <span className="lp-poster-country">France</span>
-              </div>
-            </div>
-            <div className="lp-poster lp-poster--mid" style={{ background: "linear-gradient(160deg, #0A1628 0%, #061020 100%)" }}>
-              <div className="lp-poster-map-lines lp-poster-map-lines--atlas" />
-              <div className="lp-poster-text">
-                <span className="lp-poster-city" style={{ color: "#D6B352" }}>Tokyo</span>
-                <span className="lp-poster-country" style={{ color: "#8A6820" }}>Japan</span>
-              </div>
-            </div>
-            <div className="lp-poster lp-poster--front" style={{ background: "linear-gradient(160deg, #FDF3E3 0%, #F0E8D0 100%)" }}>
-              <div className="lp-poster-map-lines lp-poster-map-lines--saffron" />
-              <div className="lp-poster-text">
-                <span className="lp-poster-city" style={{ color: "#8B3A00" }}>Mumbai</span>
-                <span className="lp-poster-country" style={{ color: "#C95A00" }}>India</span>
-              </div>
-            </div>
+            <img src="/assets/posters/budapest-ruby.webp" alt="" className="lp-poster lp-poster--back" loading="eager" />
+            <img src="/assets/posters/rome-ember.webp" alt="" className="lp-poster lp-poster--mid" loading="eager" />
+            <img src="/assets/posters/amsterdam-terracotta.webp" alt="" className="lp-poster lp-poster--front" loading="eager" />
           </div>
         </div>
+      </section>
 
-        {/* Theme pill strip */}
-        <div className="lp-theme-strip">
-          <div className="lp-theme-strip-track">
-            {[...THEMES, ...THEMES].map((t, i) => (
-              <span key={i} className="lp-theme-pill">{t}</span>
-            ))}
-          </div>
+      {/* ── Poster marquee ── */}
+      <section className="lp-marquee" aria-label="Example map posters created with Atlasify">
+        <div className="lp-marquee-track">
+          {[...POSTERS, ...POSTERS].map((p, i) => (
+            <div key={i} className="lp-marquee-card">
+              <img src={p.src} alt={`${p.city} map poster — ${p.theme} theme`} className="lp-marquee-img" loading="lazy" />
+              <div className="lp-marquee-label">
+                <span className="lp-marquee-city">{p.city}</span>
+                <span className="lp-marquee-theme">{p.theme}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -117,19 +117,19 @@ export default function LandingPage() {
           <div className="lp-step">
             <div className="lp-step-num">01</div>
             <h3 className="lp-step-title">Pick a place</h3>
-            <p className="lp-step-body">Search any city or enter exact coordinates. The map updates instantly.</p>
+            <p className="lp-step-body">Search any city or enter exact coordinates. The map centers instantly.</p>
           </div>
           <div className="lp-step-arrow" aria-hidden="true">→</div>
           <div className="lp-step">
             <div className="lp-step-num">02</div>
-            <h3 className="lp-step-title">Choose a style</h3>
-            <p className="lp-step-body">Pick from 23 themes. Adjust colors, typography, and layers.</p>
+            <h3 className="lp-step-title">Choose a theme</h3>
+            <p className="lp-step-body">23 themes — dark, light, warm, cool. Adjust typography, colors, and layers.</p>
           </div>
           <div className="lp-step-arrow" aria-hidden="true">→</div>
           <div className="lp-step">
             <div className="lp-step-num">03</div>
             <h3 className="lp-step-title">Export & print</h3>
-            <p className="lp-step-body">Download as PNG, PDF, or SVG. Print at home or at a print shop.</p>
+            <p className="lp-step-body">Download PNG, PDF, or SVG free. Upgrade once for hi-res 2K, 4K, or 8K.</p>
           </div>
         </div>
       </section>
@@ -137,21 +137,24 @@ export default function LandingPage() {
       {/* ── CTA ── */}
       <section className="lp-cta">
         <div className="lp-cta-glow" aria-hidden="true" />
-        <h2 className="lp-cta-heading">Your city. Your style.<br />Your poster.</h2>
+        <h2 className="lp-cta-heading">Your city. Your style.<br />Your wall.</h2>
         <button type="button" className="lp-btn-primary lp-btn-primary--large" onClick={openApp}>
           Create for free
         </button>
-        <p className="lp-cta-sub">No account. No credit card. Works in any browser.</p>
+        <p className="lp-cta-sub">No account needed. No credit card. Works in any modern browser.</p>
       </section>
 
       {/* ── Footer ── */}
       <footer className="lp-footer">
         <div className="lp-footer-left">
-          <img src="/assets/logo.svg" alt="" className="lp-footer-logo" />
+          <img src="/assets/logo.svg" alt="" width="24" height="24" className="lp-footer-logo" />
           <div>
             <p className="lp-footer-name">Atlasify</p>
             <p className="lp-footer-sub">by <a href="https://kjrlabs.in" target="_blank" rel="noreferrer" className="lp-footer-link">KJR Labs</a></p>
           </div>
+        </div>
+        <div className="lp-footer-center">
+          <a href="https://x.com/kshitijkoranne" target="_blank" rel="noreferrer" className="lp-footer-link">X / Twitter</a>
         </div>
         <p className="lp-footer-attr">
           Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="lp-footer-link">OpenStreetMap contributors</a>

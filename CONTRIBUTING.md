@@ -9,7 +9,7 @@ These requirements exist to keep the codebase coherent, extensible, and maintain
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/yousifamanuel/atlasify.git
+git clone https://github.com/KshitijKoranne/Atlasify.git
 cd atlasify
 bun install
 ```

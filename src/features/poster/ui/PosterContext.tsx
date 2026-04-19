@@ -49,7 +49,7 @@ const defaultLayoutHeightCm = Number(
   defaultLayoutOption?.heightCm ?? DEFAULT_POSTER_HEIGHT_CM,
 );
 const DEFAULT_LOCATION_LABEL =
-  "Hanover, Region Hannover, Lower Saxony, Germany";
+  "Vadodara, Gujarat, India";
 
 export const DEFAULT_FORM: PosterForm = {
   location: DEFAULT_LOCATION_LABEL,
@@ -60,9 +60,9 @@ export const DEFAULT_FORM: PosterForm = {
   height: String(defaultLayoutHeightCm),
   theme: defaultThemeName,
   layout: defaultLayoutId,
-  displayCity: "Hanover",
-  displayCountry: "Germany",
-  displayContinent: "Europe",
+  displayCity: "Vadodara",
+  displayCountry: "India",
+  displayContinent: "Asia",
   fontFamily: "",
   showPosterText: true,
   includeCredits: true,
@@ -127,7 +127,7 @@ export function PosterProvider({ children }: { children: ReactNode }) {
   const lastSyncedMarkerThemeColorRef = useRef<string | null>(null);
   const hasLoadedCustomIconsRef = useRef(false);
 
-  // Set initial position from browser geolocation (or Hanover fallback)
+  // Set initial position from browser geolocation (or Vadodara fallback)
   useGeolocation(dispatch);
 
   const selectedTheme = useMemo(

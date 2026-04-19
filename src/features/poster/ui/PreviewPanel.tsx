@@ -47,7 +47,7 @@ const RECENTER_HINT = "Recenter map to the current location";
 const COUNTRY_VIEW_ZOOM_LEVEL = 10;
 const CONTINENT_VIEW_ZOOM_LEVEL = 6;
 const DEFAULT_LOCATION_LABEL =
-  "Hanover, Region Hannover, Lower Saxony, Germany";
+  "Vadodara, Gujarat, India";
 
 export default function PreviewPanel() {
   const { state, dispatch, effectiveTheme, mapStyle, mapRef } =
@@ -182,14 +182,14 @@ export default function PreviewPanel() {
   const isCountryContinentView =
     mapZoom >= CONTINENT_VIEW_ZOOM_LEVEL && mapZoom < COUNTRY_VIEW_ZOOM_LEVEL;
   const cityLabel = isCityCountryView
-    ? form.displayCity || form.location || "Hanover"
+    ? form.displayCity || form.location || "Vadodara"
     : isCountryContinentView
-      ? form.displayCountry || "Germany"
+      ? form.displayCountry || "India"
       : form.displayContinent || "Earth";
   const countryLabel = isCityCountryView
-    ? form.displayCountry || "Germany"
+    ? form.displayCountry || "India"
     : isCountryContinentView
-      ? form.displayContinent || "Europe"
+      ? form.displayContinent || "Asia"
       : "Earth";
 
   const handleStartEditing = useCallback(() => {
@@ -269,11 +269,11 @@ export default function PreviewPanel() {
     if (!map) return;
     const target = selectedLocation ||
       userLocation || {
-        id: "fallback:hanover",
+        id: "fallback:vadodara",
         label: DEFAULT_LOCATION_LABEL,
         city: DEFAULT_CITY,
         country: DEFAULT_COUNTRY,
-        continent: "Europe",
+        continent: "Asia",
         lat: DEFAULT_LAT,
         lon: DEFAULT_LON,
       };

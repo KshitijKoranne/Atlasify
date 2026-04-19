@@ -33,11 +33,11 @@ export const DEFAULT_CONTAINER_PX = 600;
 /** Duration (ms) for flyTo animation when selecting a location. */
 export const FLY_TO_DURATION_MS = 1800;
 
-/** Hanover, Germany — default fallback when geolocation is denied. */
-export const DEFAULT_LAT = 52.3759;
-export const DEFAULT_LON = 9.732;
-export const DEFAULT_CITY = "Hanover";
-export const DEFAULT_COUNTRY = "Germany";
+/** Vadodara, India — default fallback when geolocation is denied. */
+export const DEFAULT_LAT = 22.3072;
+export const DEFAULT_LON = 73.1812;
+export const DEFAULT_CITY = "Vadodara";
+export const DEFAULT_COUNTRY = "India";
 
 export const REPO_URL = import.meta.env.VITE_REPO_URL ?? "";
 export const REPO_API_URL = import.meta.env.VITE_REPO_API_URL ?? "";
@@ -56,7 +56,7 @@ export const DEVELOPER_NAME = import.meta.env.VITE_DEVELOPER_NAME ?? "";
 export const DEVELOPER_PROFILE_URL =
   import.meta.env.VITE_DEVELOPER_PROFILE_URL ?? "";
 export const APP_CREDIT_URL =
-  import.meta.env.VITE_APP_CREDIT_URL ?? "atlasify.app";
+  import.meta.env.VITE_APP_CREDIT_URL ?? "atlasifyy.vercel.app";
 export const APP_VERSION = String(
   import.meta.env.VITE_APP_VERSION ?? "0.0.0",
 ).trim();
