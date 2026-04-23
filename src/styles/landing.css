@@ -111,18 +111,6 @@ html:not([data-app-mode]) #root {
   pointer-events: none;
 }
 
-.lp-hero-globe {
-  position: absolute;
-  top: 50%;
-  left: 28%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
-  pointer-events: none;
-  opacity: 0.85;
-  max-width: none;
-}
-
 .lp-hero-inner {
   max-width: 1100px;
   margin: 0 auto;
@@ -564,13 +552,6 @@ html:not([data-app-mode]) #root {
   .lp-poster--back  { transform: rotate(-8deg) translateX(-45px) translateY(8px); }
   .lp-poster--mid   { transform: rotate(-2deg) translateX(8px) translateY(-4px); }
   .lp-poster--front { transform: rotate(5deg) translateX(55px) translateY(6px); }
-
-  .lp-hero-globe {
-    width: 400px;
-    height: 400px;
-    left: 50%;
-    opacity: 0.5;
-  }
 
   .lp-marquee-card { width: 140px; }
 
