@@ -1345,3 +1345,185 @@
 .desktop-layout-label {
   display: none;
 }
+
+/* ── Payment Modal ── */
+.payment-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.payment-modal {
+  position: relative;
+  background: #0e1520;
+  border: 1px solid rgba(196, 148, 60, 0.2);
+  border-radius: 16px;
+  padding: 36px 32px;
+  max-width: 380px;
+  width: 100%;
+  color: #ffffff;
+  font-family: "Inter", -apple-system, system-ui, sans-serif;
+}
+
+.payment-modal-close {
+  position: absolute;
+  top: 12px; right: 16px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+.payment-modal-close:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.payment-modal-title {
+  margin: 0 0 6px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+}
+
+.payment-modal-price {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #d4a43a;
+}
+
+.payment-modal-price-note {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(212, 164, 58, 0.6);
+}
+
+.payment-modal-includes {
+  margin: 0 0 20px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.payment-modal-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+.payment-modal-input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.payment-modal-input:focus {
+  border-color: rgba(196, 148, 60, 0.5);
+}
+
+.payment-modal-email-hint {
+  margin: 6px 0 18px;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.payment-modal-error {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  background: rgba(220, 50, 50, 0.12);
+  border: 1px solid rgba(220, 50, 50, 0.25);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #e85555;
+}
+
+.payment-modal-pay-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #d4a43a;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.payment-modal-pay-btn:hover:not(:disabled) {
+  background: #e0b44a;
+  transform: translateY(-1px);
+}
+
+.payment-modal-pay-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.payment-modal-switch {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: rgba(212, 164, 58, 0.6);
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-align: center;
+  padding: 4px;
+}
+
+.payment-modal-switch:hover {
+  color: rgba(212, 164, 58, 0.9);
+}
+
+.desktop-export-btn--unlocked .desktop-export-tier--pro {
+  background: rgba(50, 180, 80, 0.2);
+  color: #4ade80;
+}
+
+.desktop-export-restore {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: rgba(196, 148, 60, 0.45);
+  font-family: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+  text-align: center;
+  padding: 6px 4px;
+  transition: color 0.15s;
+}
+
+.desktop-export-restore:hover {
+  color: rgba(196, 148, 60, 0.8);
+}

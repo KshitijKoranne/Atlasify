@@ -1,10 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useExport } from "@/features/export/application/useExport";
 import type { ExportFormat } from "@/features/export/domain/types";
 import { DownloadIcon, LoaderIcon } from "@/shared/ui/Icons";
 import SupportModal from "@/features/export/ui/SupportModal";
+import PaymentModal from "@/features/export/ui/PaymentModal";
+import type { UnlockTier } from "@/features/export/infrastructure/unlockStore";
+import { readUnlockState } from "@/features/export/infrastructure/unlockStore";
 
-const PRO_RESOLUTIONS = ["2K", "4K", "8K"] as const;
+const PRO_TIERS: { tier: UnlockTier; label: string; px: string; price: number }[] = [
+  { tier: "2k", label: "2K", px: "2048px", price: 99 },
+  { tier: "4k", label: "4K", px: "4096px", price: 120 },
+  { tier: "8k", label: "8K", px: "8192px", price: 150 },
+];
 
 export default function DesktopExportFab() {
   const {
@@ -12,14 +19,40 @@ export default function DesktopExportFab() {
     handleDownloadPng,
     handleDownloadPdf,
     handleDownloadSvg,
+    handleDownloadHiRes,
     supportPrompt,
     dismissSupportPrompt,
   } = useExport();
-  const [activeFormat, setActiveFormat] = useState<ExportFormat | null>(null);
 
+  const [activeFormat, setActiveFormat] = useState<ExportFormat | null>(null);
+  const [paymentTier, setPaymentTier] = useState<UnlockTier | null>(null);
+  const [unlocks, setUnlocks] = useState(readUnlockState().unlocks);
+
+  // Refresh unlock state periodically (in case restore happened)
   useEffect(() => {
     if (!isExporting) setActiveFormat(null);
   }, [isExporting]);
+
+  const refreshUnlocks = useCallback(() => {
+    setUnlocks(readUnlockState().unlocks);
+  }, []);
+
+  const handleProClick = (tier: UnlockTier) => {
+    if (unlocks[tier]) {
+      // Already unlocked — trigger hi-res download
+      const resMap = { "2k": 2048, "4k": 4096, "8k": 8192 };
+      setActiveFormat("png");
+      void handleDownloadHiRes(resMap[tier]);
+    } else {
+      // Not unlocked — open payment modal
+      setPaymentTier(tier);
+    }
+  };
+
+  const handlePaymentSuccess = () => {
+    refreshUnlocks();
+    setPaymentTier(null);
+  };
 
   const isLoading = (fmt: ExportFormat) => isExporting && activeFormat === fmt;
 
@@ -70,27 +103,52 @@ export default function DesktopExportFab() {
 
         <div className="desktop-export-divider" />
 
-        {/* Pro tier — separate buttons per resolution */}
+        {/* Pro tier */}
         <p className="desktop-export-pro-label">
           <span className="desktop-export-tier--pro">Pro</span>
           High-res
         </p>
-        {PRO_RESOLUTIONS.map((res) => (
+        {PRO_TIERS.map(({ tier, label, px, price }) => {
+          const isUnlocked = unlocks[tier];
+          return (
+            <button
+              key={tier}
+              type="button"
+              className={`desktop-export-btn desktop-export-btn--pro ${isUnlocked ? "desktop-export-btn--unlocked" : ""}`}
+              disabled={isExporting}
+              onClick={() => handleProClick(tier)}
+              title={isUnlocked ? `Download ${label} PNG` : `Unlock ${label} for ₹${price}`}
+            >
+              {isExporting && activeFormat === "png"
+                ? <LoaderIcon className="desktop-export-btn-icon is-spinning" />
+                : <DownloadIcon className="desktop-export-btn-icon" />}
+              <span>{label}</span>
+              <span className="desktop-export-pro-res">
+                {isUnlocked ? px : `₹${price}`}
+              </span>
+            </button>
+          );
+        })}
+
+        {/* Restore link */}
+        {!unlocks["2k"] && !unlocks["4k"] && !unlocks["8k"] && (
           <button
-            key={res}
             type="button"
-            className="desktop-export-btn desktop-export-btn--pro"
-            disabled
-            title={`${res} export — coming soon with Razorpay`}
+            className="desktop-export-restore"
+            onClick={() => setPaymentTier("2k")}
           >
-            <DownloadIcon className="desktop-export-btn-icon" />
-            <span>{res}</span>
-            <span className="desktop-export-pro-res">{
-              res === "2K" ? "2048px" : res === "4K" ? "4096px" : "8192px"
-            }</span>
+            Restore purchase
           </button>
-        ))}
+        )}
       </div>
+
+      {paymentTier && (
+        <PaymentModal
+          tier={paymentTier}
+          onClose={() => setPaymentTier(null)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
 
       {supportPrompt ? (
         <SupportModal

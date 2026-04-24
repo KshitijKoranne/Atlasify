@@ -214,11 +214,97 @@ export function useExport() {
     [exportPoster],
   );
 
+  const handleDownloadHiRes = useCallback(
+    async (targetWidth: number) => {
+      const map = mapRef.current;
+      if (!map) {
+        dispatch({ type: "SET_ERROR", error: "Map is not ready." });
+        return;
+      }
+
+      dispatch({ type: "SET_EXPORT_STATUS", exporting: true });
+
+      try {
+        if (form.showPosterText && form.fontFamily.trim()) {
+          await ensureGoogleFont(form.fontFamily.trim());
+        }
+
+        const widthCm = Number(form.width) || DEFAULT_POSTER_WIDTH_CM;
+        const heightCm = Number(form.height) || DEFAULT_POSTER_HEIGHT_CM;
+        const aspect = heightCm / widthCm;
+        const exportWidth = targetWidth;
+        const exportHeight = Math.round(targetWidth * aspect);
+
+        const widthInches = widthCm / CM_PER_INCH;
+        const heightInches = heightCm / CM_PER_INCH;
+        const lat = Number(form.latitude) || 0;
+        const lon = Number(form.longitude) || 0;
+
+        const {
+          canvas: mapCanvas,
+          markerProjection,
+          markerScaleX,
+          markerScaleY,
+          markerSizeScale,
+        } = await captureMapAsCanvas(map, exportWidth, exportHeight);
+
+        const { canvas } = await compositeExport(mapCanvas, {
+          theme: effectiveTheme,
+          center: { lat, lon },
+          widthInches,
+          heightInches,
+          displayCity: form.displayCity || form.location || "",
+          displayCountry: form.displayCountry || "",
+          fontFamily: form.fontFamily.trim(),
+          showPosterText: form.showPosterText,
+          showOverlay: form.showMarkers,
+          includeCredits: form.includeCredits,
+          markers: hasVisibleMarkers ? state.markers : [],
+          markerIcons: hasVisibleMarkers
+            ? getAllMarkerIcons(state.customMarkerIcons)
+            : [],
+          markerProjection: hasVisibleMarkers ? markerProjection : undefined,
+          markerScaleX: hasVisibleMarkers ? markerScaleX : undefined,
+          markerScaleY: hasVisibleMarkers ? markerScaleY : undefined,
+          markerSizeScale: hasVisibleMarkers ? markerSizeScale : undefined,
+        });
+
+        const resLabel = targetWidth <= 2048 ? "2K" : targetWidth <= 4096 ? "4K" : "8K";
+        const filename = createPosterFilename(
+          form.displayCity || form.location,
+          form.theme + `-${resLabel}`,
+          "png",
+        );
+
+        const dpi = 300;
+        const pngBlob = await createPngBlob(canvas, dpi);
+        triggerDownloadBlob(pngBlob, filename);
+
+        registerSuccessfulExport();
+        dispatch({ type: "SET_EXPORT_STATUS", exporting: false });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Hi-res export failed.";
+        dispatch({ type: "SET_EXPORT_STATUS", exporting: false, error: message });
+      }
+    },
+    [
+      mapRef,
+      form,
+      effectiveTheme,
+      dispatch,
+      hasVisibleMarkers,
+      registerSuccessfulExport,
+      state.markers,
+      state.customMarkerIcons,
+    ],
+  );
+
   return {
     isExporting: state.isExporting,
     handleDownloadPng,
     handleDownloadPdf,
     handleDownloadSvg,
+    handleDownloadHiRes,
     supportPrompt,
     dismissSupportPrompt,
   };

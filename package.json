@@ -11,7 +11,10 @@
     "showcase:grid": "node scripts/combine-showcase-grid.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.3",
+    "crypto": "^1.0.1",
     "maplibre-gl": "^5.19.0",
+    "razorpay": "^2.9.6",
     "react": "^18.3.1",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.3.1",
